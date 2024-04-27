@@ -19,30 +19,19 @@ import Empty from "~/shared/ui/empty/index.vue";
 
 import ManagerOrders from "~/pages/manager/orders/index.vue";
 
-const order = ref()
-const err = ref()
+import { useOrderListStore } from "~~/store/order.store";
+
 const { id } = useRoute().params as { id: string };
 const orderExists = ref();
 
-async function getOrder() {
-  try {
-    const res = await $fetch(`method/orders.getTest`, {
-      method: "GET",
-      params: {
-        id_orders: id,
-      }
-    });
-    const data = await res as any;
+const store = useOrderListStore()
 
-    order.value = data.response.data.orders
-    orderExists.value = order.value.find((item: any) => item.id === id);
-  }
-  catch (e) {
-    err.value = e as Error
-  }
+const params = {
+  id_orders: id
 }
 
-getOrder();
+store.fetchOrderList(params)
+store.fetchOrder(id)
 </script>
 
 <style lang="scss" scoped>

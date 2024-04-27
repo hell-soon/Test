@@ -1,8 +1,8 @@
 <template>
   <ManagerOrders>
     <template #card>
-      <template v-if="orders">
-        <StatusCard v-for="item in orders" :key="item.id" status="success">
+      <template v-if="store.orderList">
+        <StatusCard v-for="item in store.orderList" :key="item.id" status="success">
           <span>№: {{ item.id }}</span>
         </StatusCard>
       </template>
@@ -21,21 +21,11 @@ import Empty from "~/shared/ui/empty/index.vue";
 
 import ManagerOrders from "~/pages/manager/orders/index.vue";
 
-const orders = ref()
-const err = ref()
-async function getOrder() {
-  try {
-    const res = await $fetch(`method/orders.getTest`);
-    const data = await res as any;
+import { useOrderListStore } from "~~/store/order.store";
 
-    orders.value = data.response.data.orders
-  }
-  catch (e) {
-    err.value = e as Error
-  }
-}
+const store = useOrderListStore()
 
-getOrder();
+store.fetchOrderList()
 </script>
 
 <style lang="scss" scoped>
