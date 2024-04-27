@@ -25,13 +25,7 @@ const orders = ref()
 const err = ref()
 async function getOrder() {
   try {
-    const res = await $fetch(`method/orders.getTest`, {
-      method: "GET",
-      params: {
-        id_orders: 93732,
-        yers: 2022
-      }
-    });
+    const res = await $fetch(`method/orders.getTest`);
     const data = await res as any;
 
     orders.value = data.response.data.orders
