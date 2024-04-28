@@ -158,15 +158,23 @@ const button: BurronMain[] = [
 
 function updateUrlQuery() {
   const queryParams: Record<string, string> = {
-    search_value: searchQuery.value,
-    search_type: searchType.value,
-    data_start: useDateFormat(dateRange.value[0], "YYYYMMDD").value,
-    data_finish: useDateFormat(dateRange.value[1], "YYYYMMDD").value,
-    year: type.value,
+    search_type: searchType.value || '',
+    search_value: searchQuery.value || '',
+    data_start: '',
+    data_finish: '',
+    year: type.value || '',
   };
 
+  if (Array.isArray(dateRange.value) && dateRange.value.length > 0) {
+    queryParams.data_start = useDateFormat(dateRange.value[0], "YYYYMMDD").value;
+  }
+
+  if (Array.isArray(dateRange.value) && dateRange.value.length > 1) {
+    queryParams.data_finish = useDateFormat(dateRange.value[1], "YYYYMMDD").value;
+  }
+
   const filteredQueryParams = Object.fromEntries(
-    Object.entries(queryParams).filter(([_, value]) => !!value)
+    Object.entries(queryParams).filter(([_, value]) => value !== '')
   );
 
   const queryString = new URLSearchParams(filteredQueryParams);
